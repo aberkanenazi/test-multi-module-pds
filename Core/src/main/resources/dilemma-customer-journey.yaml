@@ -1,0 +1,140 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "dilemma-customer-journey"
+host: "localhost:9090"
+basePath: "/api/journey"
+schemes:
+  - "https"
+  - "http"
+paths:
+  "/api/v1/journeys/{journeyId}":
+    get:
+      tags:
+        - journey
+      parameters:
+        - $ref: "#/definitions/customers"
+      summary: retreive a journey
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/journey'
+        404:
+          description: journey not found!
+          schema:
+            $ref: '#/definitions/errorMessages'
+definitions:
+  customers:
+    description: object for customers
+    type: object
+    properties:
+      customerId:
+        description: primary key identifying a customer
+        type: string
+      lastName:
+        type: string
+      firstName:
+        type: string
+      email:
+        type: string
+  pageData:
+    description: generic object for search results
+    type: object
+    properties:
+      totalElements:
+        description: total number of elements
+        type: integer
+      page:
+        type: integer
+        description: current page number
+  journeyCreate:
+    description: create journey for a chosen customer
+    type: object
+    properties:
+      customerId:
+        type: string
+        description: customer identification
+      profileId:
+        type: string
+        description: customer profile
+      startPosition:
+        type: object
+        description: start position from path
+      body:
+        type: string
+        description: le texte du document
+  store:
+    description: a store in PGM
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+        description: store name
+      longitude:
+        type: integer
+        description: longitude of store
+      latitude:
+        type: integer
+        description: latitude of store
+      type:
+        type: string
+        description: type of store
+        enum:
+          - SPORTSWEAR
+          - WOMEN'S WEAR
+          - MEN'S WEAR
+          - KID'S WEAR
+          - KIDS TOYS
+          - OUTDOOR ACTIVITIES
+          - FASHION
+          - FOOD
+          - INTERIOR DECORATION
+          - CINEMA/MULTIMEDIA
+          - SHOES
+          - LEATHER GOODS
+          - JEWELERY
+  journey:
+    description: result list of stores (paginated)
+    allOf:
+      - $ref: '#/definitions/pageData'
+    properties:
+      journeyId:
+        type: integer
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/store"
+  errorMessages:
+    description: error description
+    type: object
+    properties:
+      errorMessageType:
+        type: array
+        items:
+          $ref: "#/definitions/errorMessageType"
+      errors:
+        type: array
+        items:
+          $ref: "#/definitions/errorMessage"
+  errorMessageType:
+    description: error message
+    type: object
+    properties:
+      type:
+        type: string
+        description: error type
+        enum:
+          - TECHNICAL
+          - FUNCTIONAL
+  errorMessage:
+    description: error description
+    type: object
+    properties:
+      errorCode:
+        type: string
+        description: code HTTP status
+      errorMesage:
+        type: string
+        description: Message description

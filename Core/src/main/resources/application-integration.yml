@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      host: 192.168.0.142
+      port: 27017
+      database: dilemma
+  rabbitmq:
+    host: 192.168.0.160
+    username: rabbitmq
+    password: rabbitmq
+    virtual-host: rabbitmq
+    port: 5672
+messaging:
+  rabbitmq:
+    messaging-queue: messaging-queue
+server:
+  port: 8080
+management:
+  info:
+    build:
+      enabled: true
+    git:
+      enabled: true
